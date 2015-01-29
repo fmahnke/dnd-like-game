@@ -10,15 +10,16 @@ import System.Environment
 
 prompt = "# "
 
-playerName = "Player"
-
 getChatText input =
     "(\\\"text\\\", \\\"" ++ input ++ "\\\")"
 
-processCommand command params socket = do
+getChatName name =
+    "(\\\"name\\\", \\\"" ++ name ++ "\\\")"
+
+processCommand clientName command params socket = do
     --let command = words input
     case (command) of
-        "/s" -> sendCommand socket $ "[\"/s\", \"[(\\\"name\\\", \\\"Player\\\")," ++ (getChatText params) ++ "]\"]"
+        "/s" -> sendCommand socket $ "[\"/s\", \"[" ++ (getChatName clientName) ++ "," ++ (getChatText params) ++ "]\"]"
         _ -> sendCommand socket $ command
 
 -- Send a command over a socket. The command is a string. It will be terminated with a newline.
@@ -32,7 +33,7 @@ commThread socket = do
     commThread socket
 
 -- Continuously display prompt and process input.
-mainloop socket = do
+mainloop socket clientName = do
     putStrLn prompt
     input <- getLine
 
@@ -40,15 +41,17 @@ mainloop socket = do
     let command = head arr
     let params = unwords $ tail arr
 
-    processCommand command params socket
+    processCommand clientName command params socket
 
-    mainloop socket
+    mainloop socket clientName
 
 main = do
     args <- getArgs
     
     let hostname = args !! 0
     let port = fromIntegral (read $ args !! 1)
+    let clientName = args !! 2
+
     putStrLn $ "Attempting to connect to server at" ++ " " ++ hostname ++ ":" ++ show port
 
     socket <- socket AF_INET Stream defaultProtocol
@@ -58,5 +61,5 @@ main = do
 
     forkIO $ commThread socket
 
-    mainloop socket
+    mainloop socket clientName
 
