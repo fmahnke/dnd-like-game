@@ -54,7 +54,7 @@ main = do
     socket <- socket AF_INET Stream defaultProtocol
     host <- inet_addr hostname
 
-    conn <- connect socket (SockAddrInet 65000 host)
+    conn <- connect socket (SockAddrInet port host)
 
     forkIO $ commThread socket
 
