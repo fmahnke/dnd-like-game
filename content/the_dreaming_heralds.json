@@ -1,0 +1,46 @@
+{
+  "sequences": [
+    {
+      "from": "barons_road",
+      "to": "the_yarl_farm"
+    },
+    {
+      "from": "the_yarl_farm",
+      "to": "journey_to_the_temple"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "barons_road",
+      "sceneName": "Baron's Road",
+      "links": [
+        "The Yarl Farm"
+      ],
+      "narration": "You are travelling south along the Baron's Road, a lonely stretch of highway bordered by farmland to the west and a dark wood to the east.  Around mid-morning, a middle-aged human man dressed in simple workaday clothes steps out to the middle of the road. \"Strangers, please help me. My son is sick...\"",
+      "npcs": [
+        {
+          "name": "Abel Yarl",
+          "dialogues": [
+            {
+              "question": "Who are you?",
+              "answer": "\"My name is Abel Yarl, I have a farm nearby.\""
+            },
+            {
+              "question": "Where is your son?",
+              "answer": "He is back at my farm, half a mile from here."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the_yarl_farm",
+      "sceneName": "The Yarl Farm",
+      "links": [
+      ],
+      "narration": "A short walk down a dirt track leading west from the Baron’s Road heads to the Yarl Farm.  It consists of a run-down stone farmhouse and several large wooden barns. The farm has seen better days, and yet the ground here is fertile enough for the family to do reasonably well, growing barley and wheat and keeping a small herd of sheep.\n\nDevek Yarl is being kept in a small bedroom on the upper storey of the farmhouse. He is a fair-haired freckled teenager with a deathly pallor. His heart rate and breathing are extremely slow, and his skin is cold to the touch. Watching over him are his tearful mother, Elista, and his eldest sister, Abella.",
+      "npcs": [
+      ]
+    }
+  ]
+}
