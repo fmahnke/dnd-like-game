@@ -8,6 +8,9 @@ import Network.Socket
 import Network.Socket.ByteString
 import System.Environment
 
+import DM
+import Menu
+
 prompt = "# "
 
 getChatText input =
@@ -16,8 +19,8 @@ getChatText input =
 getChatName name =
     "(\\\"name\\\", \\\"" ++ name ++ "\\\")"
 
+-- Process a standard chat command.
 processCommand clientName command params socket = do
-    --let command = words input
     case (command) of
         "/s" -> sendCommand socket $ "[\"/s\", \"[" ++ (getChatName clientName) ++ "," ++ (getChatText params) ++ "]\"]"
         _ -> sendCommand socket $ command
@@ -33,7 +36,7 @@ commThread socket = do
     commThread socket
 
 -- Continuously display prompt and process input.
-mainloop socket clientName = do
+mainloop socket clientName currentScene = do
     putStrLn prompt
     input <- getLine
 
@@ -42,12 +45,20 @@ mainloop socket clientName = do
     let params = unwords $ tail arr
 
     processCommand clientName command params socket
+    processDMCommand command params currentScene
 
-    mainloop socket clientName
+    mainloop socket clientName currentScene
 
 main = do
     args <- getArgs
     
+    adventure <- loadAdventure "content/the_dreaming_heralds.json"
+    let scene = (scenes adventure) !! 0
+
+    let dlist = map dialogueString (dialogues ((npcs scene) !! 0))
+    let li = menu dlist
+    sequence [putStrLn item | item <- li]
+
     let hostname = args !! 0
     let port = fromIntegral (read $ args !! 1)
     let clientName = args !! 2
@@ -61,5 +72,5 @@ main = do
 
     forkIO $ commThread socket
 
-    mainloop socket clientName
+    mainloop socket clientName scene
 
