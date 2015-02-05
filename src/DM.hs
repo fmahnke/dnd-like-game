@@ -53,9 +53,20 @@ dialogCommand scene args
     where npcIndex = (read $ args !! 0 :: Int)
           dialogueIndex = (read $ args !! 1 :: Int)
 
+nextScene :: String -> Scene -> Scene
+nextScene command scene
+    | command == "/next" = scene
+    | otherwise = scene
+
+-- Links command.
+linksCommand :: Scene -> String
+linksCommand scene = unlines $ menu $ links scene
+
 -- Process a Dungeon Master command string.
+processDMCommand :: String -> String -> Scene -> IO (Scene)
 processDMCommand command params currentScene = do
     let args = words params
+    
     case (command) of
         -- Describe current scene.
         "/sc" -> putStrLn $ describe currentScene
@@ -63,6 +74,12 @@ processDMCommand command params currentScene = do
         "/di" -> putStrLn $ dialogCommand currentScene args
         -- Show NPC menu.
         "/np" -> putStrLn $ unlines $ menu $ map name (npcs currentScene)
+        -- Show links.
+        "/li" -> putStrLn $ linksCommand currentScene
+        _ -> putStr ""
+
+    return $ nextScene command currentScene
+            
 
 loadAdventure filename = do
     text <- readFile filename

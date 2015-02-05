@@ -45,19 +45,15 @@ mainloop socket clientName currentScene = do
     let params = unwords $ tail arr
 
     processCommand clientName command params socket
-    processDMCommand command params currentScene
+    nextScene <- processDMCommand command params currentScene
 
-    mainloop socket clientName currentScene
+    mainloop socket clientName nextScene
 
 main = do
     args <- getArgs
     
     adventure <- loadAdventure "../content/the_dreaming_heralds.json"
     let scene = (scenes adventure) !! 0
-
-    let dlist = map dialogueString (dialogues ((npcs scene) !! 0))
-    let li = menu dlist
-    sequence [putStrLn item | item <- li]
 
     let hostname = args !! 0
     let port = fromIntegral (read $ args !! 1)
