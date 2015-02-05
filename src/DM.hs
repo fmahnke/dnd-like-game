@@ -57,9 +57,12 @@ dialogCommand scene args
 processDMCommand command params currentScene = do
     let args = words params
     case (command) of
-        "/l" -> putStrLn $ describe currentScene
-        --"/d" -> putStrLn $ answer ((dialogues ((npcs currentScene) !! 0)) !! 0)
-        "/d" -> putStrLn $ dialogCommand currentScene args
+        -- Describe current scene.
+        "/sc" -> putStrLn $ describe currentScene
+        -- List all dialogues, optionally by NPC index.
+        "/di" -> putStrLn $ dialogCommand currentScene args
+        -- Show NPC menu.
+        "/np" -> putStrLn $ unlines $ menu $ map name (npcs currentScene)
 
 loadAdventure filename = do
     text <- readFile filename

@@ -52,7 +52,7 @@ mainloop socket clientName currentScene = do
 main = do
     args <- getArgs
     
-    adventure <- loadAdventure "content/the_dreaming_heralds.json"
+    adventure <- loadAdventure "../content/the_dreaming_heralds.json"
     let scene = (scenes adventure) !! 0
 
     let dlist = map dialogueString (dialogues ((npcs scene) !! 0))
