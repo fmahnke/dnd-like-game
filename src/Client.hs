@@ -36,7 +36,7 @@ commThread socket = do
     commThread socket
 
 -- Continuously display prompt and process input.
-mainloop socket clientName currentScene = do
+mainloop socket clientName currentScene adventure = do
     putStrLn prompt
     input <- getLine
 
@@ -45,9 +45,9 @@ mainloop socket clientName currentScene = do
     let params = unwords $ tail arr
 
     processCommand clientName command params socket
-    nextScene <- processDMCommand command params currentScene
+    nextScene <- processDMCommand command params currentScene adventure
 
-    mainloop socket clientName nextScene
+    mainloop socket clientName nextScene adventure
 
 main = do
     args <- getArgs
@@ -68,5 +68,5 @@ main = do
 
     forkIO $ commThread socket
 
-    mainloop socket clientName scene
+    mainloop socket clientName scene adventure
 

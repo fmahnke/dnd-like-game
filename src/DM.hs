@@ -5,6 +5,8 @@
 module DM
     where
 
+import Data.List
+import Data.Maybe
 import Text.JSON.Generic
 
 import Menu
@@ -25,7 +27,7 @@ data Npc = Npc {
 } deriving (Show, Data, Typeable)
 
 data Scene = Scene {
-    id :: String,
+    sceneId :: String,
     sceneName :: String,
     links :: [String],
     narration :: String,
@@ -53,18 +55,19 @@ dialogCommand scene args
     where npcIndex = (read $ args !! 0 :: Int)
           dialogueIndex = (read $ args !! 1 :: Int)
 
-nextScene :: String -> Scene -> Scene
-nextScene command scene
-    | command == "/next" = scene
+nextScene :: String -> Scene -> Adventure -> Scene
+nextScene command scene adventure
+    | command == "/next" = Data.Maybe.fromMaybe scene $ Data.List.find (\x -> (sceneName x == nextSceneName)) (scenes adventure)
     | otherwise = scene
+    where nextSceneName = (links scene !! 0)
 
 -- Links command.
 linksCommand :: Scene -> String
 linksCommand scene = unlines $ menu $ links scene
 
 -- Process a Dungeon Master command string.
-processDMCommand :: String -> String -> Scene -> IO (Scene)
-processDMCommand command params currentScene = do
+processDMCommand :: String -> String -> Scene -> Adventure -> IO (Scene)
+processDMCommand command params currentScene adventure = do
     let args = words params
     
     case (command) of
@@ -78,7 +81,7 @@ processDMCommand command params currentScene = do
         "/li" -> putStrLn $ linksCommand currentScene
         _ -> putStr ""
 
-    return $ nextScene command currentScene
+    return $ nextScene command currentScene adventure
             
 
 loadAdventure filename = do

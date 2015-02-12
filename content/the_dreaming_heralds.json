@@ -11,7 +11,7 @@
   ],
   "scenes": [
     {
-      "id": "barons_road",
+      "sceneId": "barons_road",
       "sceneName": "Baron's Road",
       "links": [
         "The Yarl Farm"
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "id": "the_yarl_farm",
+      "sceneId": "the_yarl_farm",
       "sceneName": "The Yarl Farm",
       "links": [
       ],
